@@ -1,0 +1,45 @@
+USE db_cabeleireiro;
+ 
+-- 1. Desativa temporariamente as chaves estrangeiras para limpar os dados
+SET FOREIGN_KEY_CHECKS = 0;
+ 
+TRUNCATE TABLE tb_agendamento;
+TRUNCATE TABLE tb_cliente;
+TRUNCATE TABLE tb_servico;
+TRUNCATE TABLE tb_profissional;
+ 
+SET FOREIGN_KEY_CHECKS = 1;
+ 
+-- 2. Clientes
+INSERT INTO tb_cliente (id_cliente, nome, telefone, email, data_nascimento) VALUES
+(1, 'João Guilherme', '(19) 98765-4321', 'joaogui@email.com', '2009-09-14'),
+(2, 'Otávio Costa', '(19) 99123-4567', 'otaviocos@email.com', '2009-08-17'),
+(3, 'Maria Eduarda', '(19) 98877-6655', 'maria.e@email.com', '2010-01-28'),
+(4, 'Rita de Cássia', '(19) 97112-3344', 'ritadec@email.com', '2009-11-26');
+ 
+-- 3. Serviços
+INSERT INTO tb_servico (id_servico, nome_servico, descricao, preco, duracao_minutos) VALUES
+(1, 'Corte Feminino', 'Corte, lavagem e escova simples', 120.00, 60),
+(2, 'Corte Masculino', 'Corte com acabamento na tesoura ou máquina', 50.00, 30),
+(3, 'Coloração Completa', 'Aplicação de tinta e hidratação pós-cor', 220.00, 120),
+(4, 'Escova Progressiva', 'Alinhamento capilar sem formaldeído', 250.00, 150),
+(5, 'Hidratação Profunda', 'Tratamento intensivo com máscara de nutrição', 90.00, 45);
+ 
+-- 4. Profissionais
+INSERT INTO tb_profissional (id_profissional, nome, especialidade, telefone, comissao) VALUES
+(1, 'Fernanda Lima', 'Cabeleireira / Colorista', '(19) 99888-1122', 40.00),
+(2, 'Roberto Alves', 'Barbeiro / Visagista', '(19) 99777-3344', 35.00),
+(3, 'Juliana Costa', 'Especialista em Tratas e Cortes', '(19) 99666-5566', 40.00),
+(4, 'Camila Rodrigues', 'Colorista e Penteados', '(19) 99555-7788', 38.00),
+(5, 'Diego Souza', 'Cabeleireiro Generalista', '(19) 99444-9900', 35.00);
+ 
+-- 5. Agendamentos com Serviços e Clientes Coerentes:
+-- 1: João Guilherme (Cliente 1) -> Corte Masculino (Serviço 2) com Roberto Alves (Profissional 2)
+-- 2: Otávio Costa (Cliente 2) -> Corte Masculino (Serviço 2) com Diego Souza (Profissional 5)
+-- 3: Maria Eduarda (Cliente 3) -> Coloração Completa (Serviço 3) com Fernanda Lima (Profissional 1)
+-- 4: Rita de Cássia (Cliente 4) -> Escova Progressiva (Serviço 4) com Camila Rodrigues (Profissional 4)
+INSERT INTO tb_agendamento (data_hora, status, id_cliente, id_profissional, id_servico) VALUES
+('2026-10-20 09:00:00', 'Agendado', 1, 2, 2),
+('2026-10-20 10:30:00', 'Concluído', 2, 5, 2),
+('2026-10-20 14:00:00', 'Agendado', 3, 1, 3),
+('2026-10-21 11:00:00', 'Agendado', 4, 4, 4);
